@@ -1,29 +1,46 @@
 <%- include('layout', { body: '' }) %>
 <h1>Dashboard</h1>
+
 <% if (role === 'student') { %>
-<h2>Courses</h2>
-<form action="/student/apply" method="POST">
-  <% courses.forEach(course => { %>
-  <div>
-    <p><%= course.name %></p>
-    <button type="submit" name="courseId" value="<%= course._id %>">
-      Apply
-    </button>
-  </div>
-  <% }) %>
-</form>
+  <h2>Courses</h2>
+  <form action="/student/apply" method="POST">
+    <% courses.forEach(course => { %>
+      <div>
+        <p><%= course.name %></p>
+        <% 
+          // Check if the student has already applied for this course
+          const application = applications.find(app => app.course._id.toString() === course._id.toString());
+          if (application) { 
+        %>
+          <p>Status: <%= application.status %></p>
+        <% } else { %>
+          <button type="submit" name="courseId" value="<%= course._id %>">Apply</button>
+        <% } %>
+      </div>
+    <% }) %>
+  </form>
+
+  <h2>Your Applications</h2>
+  <ul>
+    <% applications.forEach(app => { %>
+      <li>
+        Course: <%= app.course.name %> | Status: <%= app.status %>
+      </li>
+    <% }) %>
+  </ul>
+
 <% } else if (role === 'staff') { %>
-<h2>Add Course</h2>
-<form action="/staff/add-course" method="POST">
-  <input type="text" name="name" placeholder="Course Name" required />
-  <button type="submit">Add</button>
-</form>
-<h2>Your Courses</h2>
-<% courses.forEach(course => { %>
-<form action="/staff/delete-course" method="POST">
-  <p><%= course.name %></p>
-  <button type="submit" name="courseId" value="<%= course._id %>">
-    Delete
-  </button>
-</form>
-<% }) %> <% } %>
+  <h2>Add Course</h2>
+  <form action="/staff/add-course" method="POST">
+    <input type="text" name="name" placeholder="Course Name" required />
+    <button type="submit">Add</button>
+  </form>
+
+  <h2>Your Courses</h2>
+  <% courses.forEach(course => { %>
+    <form action="/staff/delete-course" method="POST">
+      <p><%= course.name %></p>
+      <button type="submit" name="courseId" value="<%= course._id %>">Delete</button>
+    </form>
+  <% }) %>
+<% } %>

@@ -1,0 +1,16 @@
+<%- include('layout', { body: '' }) %>
+<h1>Manage Applications</h1>
+<form action="/committee/update-status" method="POST">
+    <% applications.forEach(app => { %>
+      <div>
+        <p>Course: <%= app.course.name %> | Student: <%= app.student.username %></p>
+        <input type="hidden" name="applicationId" value="<%= app._id %>">
+        <select name="status" required>
+          <option value="pending" <%= app.status === 'pending' ? 'selected' : '' %>>Pending</option>
+          <option value="approved" <%= app.status === 'approved' ? 'selected' : '' %>>Approved</option>
+          <option value="denied" <%= app.status === 'denied' ? 'selected' : '' %>>Denied</option>
+        </select>
+        <button type="submit">Update</button>
+      </div>
+    <% }) %>
+  </form>

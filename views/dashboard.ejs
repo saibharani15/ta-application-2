@@ -1,0 +1,29 @@
+<%- include('layout', { body: '' }) %>
+<h1>Dashboard</h1>
+<% if (role === 'student') { %>
+<h2>Courses</h2>
+<form action="/student/apply" method="POST">
+  <% courses.forEach(course => { %>
+  <div>
+    <p><%= course.name %></p>
+    <button type="submit" name="courseId" value="<%= course._id %>">
+      Apply
+    </button>
+  </div>
+  <% }) %>
+</form>
+<% } else if (role === 'staff') { %>
+<h2>Add Course</h2>
+<form action="/staff/add-course" method="POST">
+  <input type="text" name="name" placeholder="Course Name" required />
+  <button type="submit">Add</button>
+</form>
+<h2>Your Courses</h2>
+<% courses.forEach(course => { %>
+<form action="/staff/delete-course" method="POST">
+  <p><%= course.name %></p>
+  <button type="submit" name="courseId" value="<%= course._id %>">
+    Delete
+  </button>
+</form>
+<% }) %> <% } %>

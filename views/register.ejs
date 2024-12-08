@@ -1,0 +1,12 @@
+<form action="/auth/register" method="POST">
+  <input type="text" name="username" placeholder="Username" required />
+  <input type="email" name="email" placeholder="Email" required />
+  <input type="password" name="password" placeholder="Password" required />
+  <select name="role">
+    <option value="student">Student</option>
+    <option value="staff">Staff</option>
+    <option value="committee">Committee</option>
+    <option value="instructor">Instructor</option>
+  </select>
+  <button type="submit">Register</button>
+</form>

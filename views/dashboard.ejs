@@ -1,46 +1,78 @@
 <%- include('layout', { body: '' }) %>
 <h1>Dashboard</h1>
 
+<!-- Student Dashboard -->
 <% if (role === 'student') { %>
-  <h2>Courses</h2>
-  <form action="/student/apply" method="POST">
-    <% courses.forEach(course => { %>
-      <div>
-        <p><%= course.name %></p>
-        <% 
-          // Check if the student has already applied for this course
-          const application = applications.find(app => app.course._id.toString() === course._id.toString());
-          if (application) { 
-        %>
-          <p>Status: <%= application.status %></p>
-        <% } else { %>
-          <button type="submit" name="courseId" value="<%= course._id %>">Apply</button>
-        <% } %>
-      </div>
-    <% }) %>
-  </form>
-
-  <h2>Your Applications</h2>
-  <ul>
-    <% applications.forEach(app => { %>
-      <li>
-        Course: <%= app.course.name %> | Status: <%= app.status %>
-      </li>
-    <% }) %>
-  </ul>
-
-<% } else if (role === 'staff') { %>
-  <h2>Add Course</h2>
-  <form action="/staff/add-course" method="POST">
-    <input type="text" name="name" placeholder="Course Name" required />
-    <button type="submit">Add</button>
-  </form>
-
-  <h2>Your Courses</h2>
+<h2>Available Courses</h2>
+<form action="/student/apply" method="POST">
   <% courses.forEach(course => { %>
-    <form action="/staff/delete-course" method="POST">
-      <p><%= course.name %></p>
-      <button type="submit" name="courseId" value="<%= course._id %>">Delete</button>
-    </form>
+  <div
+    style="
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    "
+  >
+    <p><strong>Course Name:</strong> <%= course.name %></p>
+    <% // Check if the student has already applied for this course const
+    application = applications.find(app => app.course._id.toString() ===
+    course._id.toString()); if (application) { %>
+    <p><strong>Status:</strong> <%= application.status %></p>
+    <% } else { %>
+    <button type="submit" name="courseId" value="<%= course._id %>">
+      Apply
+    </button>
+    <% } %>
+  </div>
   <% }) %>
+</form>
+
+<h2>Your Applications</h2>
+<% if (applications.length > 0) { %>
+<ul>
+  <% applications.forEach(app => { %>
+  <li>
+    <strong>Course:</strong> <%= app.course.name %> |
+    <strong>Status:</strong> <%= app.status %>
+  </li>
+  <% }) %>
+</ul>
+<% } else { %>
+<p>You haven't applied for any courses yet.</p>
 <% } %>
+
+<!-- Staff Dashboard -->
+<% } else if (role === 'staff') { %>
+<h2>Add a New Course</h2>
+<form action="/staff/add-course" method="POST" style="margin-bottom: 2rem">
+  <input
+    type="text"
+    name="name"
+    placeholder="Course Name"
+    required
+    style="padding: 0.5rem; width: 70%; margin-right: 1rem"
+  />
+  <button type="submit">Add Course</button>
+</form>
+
+<h2>Your Courses</h2>
+<% if (courses.length > 0) { %> <% courses.forEach(course => { %>
+<div
+  style="
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  "
+>
+  <p><strong>Course Name:</strong> <%= course.name %></p>
+  <form action="/staff/delete-course" method="POST" style="display: inline">
+    <button type="submit" name="courseId" value="<%= course._id %>">
+      Delete
+    </button>
+  </form>
+</div>
+<% }) %> <% } else { %>
+<p>No courses created yet.</p>
+<% } %> <% } %>

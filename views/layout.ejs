@@ -9,6 +9,14 @@
       <a href="/">Home</a>
       <a href="/logout">Logout</a>
       <a href="/register">Register</a>
+
+      <% if (role === 'staff') { %>
+      <a href="/staff/dashboard">Manage Courses</a>
+      <% } else if (role === 'student') { %>
+      <a href="/student/dashboard">Available Courses</a>
+      <% } else if (role === 'instructor') { %>
+      <a href="/instructor/dashboard">Manage Applications</a>
+      <% } %>
     </nav>
     <main><%- body %></main>
   </body>

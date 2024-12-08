@@ -16,6 +16,7 @@ const applicationSchema = new mongoose.Schema({
     enum: ["pending", "approved", "denied"],
     default: "pending",
   },
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Application", applicationSchema);
